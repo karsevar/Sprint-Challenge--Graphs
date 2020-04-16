@@ -29,6 +29,73 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+## plan
+# first create a depth first search function that can traverse the test_line.txt 
+    # If the depth first search algorithm can traverse the straight line then 
+    # the edge cases of having to turn back to unexplored nodes can be implemented
+
+# stack data structure from the last project's utils
+class Stack():
+    def __init__(self):
+        self.stack = []
+    def push(self, value):
+        self.stack.append(value)
+    def pop(self):
+        if self.size() > 0:
+            return self.stack.pop()
+        else:
+            return None
+    def size(self):
+        return len(self.stack)
+
+# used to reverse the directions for placement in the visited array 
+reverse_direction = {
+    'n':'s',
+    's':'n',
+    'w':'e',
+    'e':'w'
+}
+
+def dfs_modified(traversal_path, player):
+
+    # create a visited array (this will be the traversal graph data structure in 
+    # the readme)
+        # example visited = {0: {n: ?, etc}}
+    # initialize the visited array with the possible exits in room 0 
+    # create a stack using the Stack class in the last project
+        # this stack will hold the randomly chosen direction 
+        # created from the command random.choice(player.current_room.get_exits())
+    # initialize the stack with a randomly chosen direction from get_exits()
+    # initialize a past_room variable that will hold the id of the past room 
+
+    # while stack is not empty 
+        # pop the direction off the stack 
+
+        # check if the direction exists in the visited array as a key to a 
+        # question mark 
+            # if so:
+                # move the player to the next room (player.travel(direction)) 
+                # update the visited array with the new room key and possible 
+                # directions 
+                # place the direction in both the past_room's and current_room's 
+                # key in the visited dictionary (in the current room's case the 
+                # direction will need to be reversed)
+
+    visited = {}
+    visited[player.current_room.id] = {}
+    for direction in player.current_room.get_exits():
+        visited[player.current_room.id][direction] = '?'
+    
+    past_room = player.current_room.id
+    start_direction = random.choice(player.current_room.get_exits())
+    stack = Stack()
+    stack.push(start_direction)
+    
+
+dfs_modified(traversal_path, player)
+    
+
+
 
 
 # TRAVERSAL TEST
