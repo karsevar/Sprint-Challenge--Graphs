@@ -10,8 +10,8 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -76,9 +76,11 @@ def found_question_mark(visited, room_id):
     found and False if not
     '''
     for direction in visited[room_id]:
+        print('room id from found question mark', room_id)
+        print('room directions', direction, visited[room_id][direction])
         if visited[room_id][direction] == '?':
             return True 
-        return False
+    return False
 
 def bfs(visited, current_room):
     '''
@@ -117,6 +119,7 @@ def bfs(visited, current_room):
         current_direction = path[-1]
 
         if current_direction[0] not in visited_bfs:
+            visited_bfs.add(current_direction[0])
             # will need to create a helper function to keep code clean
             # helper function found_question_mark 
             if found_question_mark(visited, current_direction[0]):
@@ -124,7 +127,7 @@ def bfs(visited, current_room):
             
             for direction in visited[current_direction[0]]:
                 new_path = list(path)
-                new_path.append(visited[current_direction[0]][direction], direction)
+                new_path.append((visited[current_direction[0]][direction], direction))
                 queue.enqueue(new_path)
 
 # used to reverse the directions for placement in the visited array 
@@ -221,6 +224,9 @@ def dfs_modified(traversal_path, player):
             # depth first search hit a deadend 
             if len(valid_exits) == 0:
                 print('visited dictionary', visited, 'past room', past_room)
+
+                route = bfs(visited, player.current_room.id)
+                print('route back to unexplored', route)
                 return traversal_path
 
             new_direction = random.choice(valid_exits)
