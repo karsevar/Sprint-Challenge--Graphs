@@ -90,6 +90,33 @@ def dfs_modified(traversal_path, player):
     start_direction = random.choice(player.current_room.get_exits())
     stack = Stack()
     stack.push(start_direction)
+
+    while stack.size() > 0:
+        direction = stack.pop()
+
+        if visited[player.current_room.id][direction] == '?':
+            player.travel(direction) 
+            # append direction to traversal_path
+            traversal_path.append(direction)
+            # update the visited dictionary with the current room's orientation to 
+            # the past room 
+            # example visited = {0: {n:1}}
+            visited[past_room][direction] = player.current_room.id
+            # update visited dictionary with the new room id and all possible room 
+            # exits if the player.current_room.id is not in the visited dictionary 
+            if player.current_room.id not in visited:
+                visited[player.current_room.id] = {}
+                for direction in player.current_room.get_exits():
+                    visited[player.current_room.id][direction] = '?'
+            # update the visited dictionary with the past room's orientation to the 
+            # current room 
+            visited[player.current_room.id][reverse_direction[direction]] = past_room
+            # update past_room to read the id of the current_room
+            past_room = player.current_room.id
+
+    print('visited dictionary', visited, 'past room', past_room)
+
+            
     
 
 dfs_modified(traversal_path, player)
