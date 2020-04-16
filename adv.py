@@ -30,9 +30,15 @@ player = Player(world.starting_room)
 traversal_path = []
 
 ## plan
+# (COMPLETED)
 # first create a depth first search function that can traverse the test_line.txt 
     # If the depth first search algorithm can traverse the straight line then 
     # the edge cases of having to turn back to unexplored nodes can be implemented
+
+# (IN PROGRESS)
+# second create a breadth first search function that can back track to rooms 
+    # that haven't been fully explored. Namely the bfs while loop will terminate 
+    # once it comes across a room with at least one '?'.
 
 # stack data structure from the last project's utils
 class Stack():
@@ -47,6 +53,48 @@ class Stack():
             return None
     def size(self):
         return len(self.stack)
+
+# queue data structure from the last project's utils
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
+def bfs(visited, current_room):
+    '''
+    This function will be a modification of the breadth first search from the 
+    graphs.py file. This function accepts two arguments the traversal map (named in 
+    the program as visited) and the id of the current room (which will be passed in 
+    as current_room)
+    '''
+    # create a new visited variable which will be a set() in this function 
+    # initialize a queue and place the current_room in the queue as [(current_room, 'NONE')]
+
+    # create a while loop that will terminate once the queue is empty
+        # dequeue the path from the queue the path will be visualized as an array 
+        # containing tuples (room id, direction) example [(0, NONE), (1, n)]
+
+        # if the last tuple in the path is not in visited:
+            # check if room id in the last tuple has any question marks in any of the 
+            # directions 
+                # if so return the tuple path 
+                # if not:
+                    # loop through the directions using the room id from the last 
+                    # tuple in the path visited[path[-1][0]]
+                        # copy the path and append the neighboring rooms to the new_path
+                        # example (visited[path[-1][0]][direction], direction) to get the following
+                        # (room id, direction)
+                        # append the newly created tuple to the new_path
+                        # enqueue new_path array 
+        
 
 # used to reverse the directions for placement in the visited array 
 reverse_direction = {
@@ -137,6 +185,9 @@ def dfs_modified(traversal_path, player):
             # print('valid exits', valid_exits)
             # edge case if get_valid_exits function returns an empty array as 
             # the algorithm hit a deadend and will need to turn back
+
+            # place breadth first search turn around logic here.
+            # depth first search hit a deadend 
             if len(valid_exits) == 0:
                 print('visited dictionary', visited, 'past room', past_room)
                 return traversal_path
@@ -146,12 +197,9 @@ def dfs_modified(traversal_path, player):
 
             print('visited dictionary', visited, 'past room', past_room)
 
-print('traversal path', traversal_path)
-
-            
-    
 
 dfs_modified(traversal_path, player)
+print('traversal path', traversal_path)
     
 
 
