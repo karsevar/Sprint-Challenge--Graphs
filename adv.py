@@ -56,6 +56,20 @@ reverse_direction = {
     'e':'w'
 }
 
+def get_valid_exits(visited, current_room_id):
+    '''
+    returns an array of exits that have question marks as 
+    values within the visited dictionary
+    '''
+    new_exits = []
+
+    for direction in visited[current_room_id]:
+        if visited[current_room_id][direction] == '?':
+            new_exits.append(direction)
+
+    return new_exits
+
+
 def dfs_modified(traversal_path, player):
 
     # create a visited array (this will be the traversal graph data structure in 
@@ -80,6 +94,9 @@ def dfs_modified(traversal_path, player):
                 # place the direction in both the past_room's and current_room's 
                 # key in the visited dictionary (in the current room's case the 
                 # direction will need to be reversed)
+                # get valid exits from a function that will return all exits that 
+                # have a question mark value 
+                # run random.choice() on the returned valid exits 
 
     visited = {}
     visited[player.current_room.id] = {}
@@ -113,6 +130,14 @@ def dfs_modified(traversal_path, player):
             visited[player.current_room.id][reverse_direction[direction]] = past_room
             # update past_room to read the id of the current_room
             past_room = player.current_room.id
+
+            valid_exits = get_valid_exits(visited, player.current_room.id)
+            print('valid exits', valid_exits)
+            new_direction = random.choice(valid_exits)
+            stack.push(new_direction)
+            
+
+            
 
     print('visited dictionary', visited, 'past room', past_room)
 
