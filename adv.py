@@ -56,12 +56,14 @@ reverse_direction = {
     'e':'w'
 }
 
+
 def get_valid_exits(visited, current_room_id):
     '''
     returns an array of exits that have question marks as 
     values within the visited dictionary
     '''
     new_exits = []
+    # print('visited array in get_valid exits', visited)
 
     for direction in visited[current_room_id]:
         if visited[current_room_id][direction] == '?':
@@ -123,8 +125,8 @@ def dfs_modified(traversal_path, player):
             # exits if the player.current_room.id is not in the visited dictionary 
             if player.current_room.id not in visited:
                 visited[player.current_room.id] = {}
-                for direction in player.current_room.get_exits():
-                    visited[player.current_room.id][direction] = '?'
+                for nsew in player.current_room.get_exits():
+                    visited[player.current_room.id][nsew] = '?'
             # update the visited dictionary with the past room's orientation to the 
             # current room 
             visited[player.current_room.id][reverse_direction[direction]] = past_room
@@ -132,14 +134,19 @@ def dfs_modified(traversal_path, player):
             past_room = player.current_room.id
 
             valid_exits = get_valid_exits(visited, player.current_room.id)
-            print('valid exits', valid_exits)
+            # print('valid exits', valid_exits)
+            # edge case if get_valid_exits function returns an empty array as 
+            # the algorithm hit a deadend and will need to turn back
+            if len(valid_exits) == 0:
+                print('visited dictionary', visited, 'past room', past_room)
+                return traversal_path
+
             new_direction = random.choice(valid_exits)
-            stack.push(new_direction)
-            
+            stack.push(new_direction)       
 
-            
+            print('visited dictionary', visited, 'past room', past_room)
 
-    print('visited dictionary', visited, 'past room', past_room)
+print('traversal path', traversal_path)
 
             
     
