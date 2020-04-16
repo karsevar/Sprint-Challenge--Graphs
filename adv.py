@@ -68,6 +68,18 @@ class Queue():
     def size(self):
         return len(self.queue)
 
+def found_question_mark(visited, room_id):
+    '''
+    Helper function for the breadth first search function.
+    It loops through all the directions for a provided room id 
+    in the visited dictionary and returns True if a question mark is 
+    found and False if not
+    '''
+    for direction in visited[room_id]:
+        if visited[room_id][direction] == '?':
+            return True 
+        return False
+
 def bfs(visited, current_room):
     '''
     This function will be a modification of the breadth first search from the 
@@ -94,7 +106,26 @@ def bfs(visited, current_room):
                         # (room id, direction)
                         # append the newly created tuple to the new_path
                         # enqueue new_path array 
-        
+    visited_bfs = set()
+    queue = Queue()
+    queue.enqueue([(current_room, 'NONE')]) 
+
+    while queue.size() > 0:
+        path = queue.dequeue()
+
+        # get the last tuple from the path
+        current_direction = path[-1]
+
+        if current_direction[0] not in visited_bfs:
+            # will need to create a helper function to keep code clean
+            # helper function found_question_mark 
+            if found_question_mark(visited, current_direction[0]):
+                return path 
+            
+            for direction in visited[current_direction[0]]:
+                new_path = list(path)
+                new_path.append(visited[current_direction[0]][direction], direction)
+                queue.enqueue(new_path)
 
 # used to reverse the directions for placement in the visited array 
 reverse_direction = {
