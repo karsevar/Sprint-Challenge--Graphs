@@ -11,10 +11,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -76,8 +76,8 @@ def found_question_mark(visited, room_id):
     found and False if not
     '''
     for direction in visited[room_id]:
-        print('room id from found question mark', room_id)
-        print('room directions', direction, visited[room_id][direction])
+        # print('room id from found question mark', room_id)
+        # print('room directions', direction, visited[room_id][direction])
         if visited[room_id][direction] == '?':
             return True 
     return False
@@ -223,16 +223,31 @@ def dfs_modified(traversal_path, player):
             # place breadth first search turn around logic here.
             # depth first search hit a deadend 
             if len(valid_exits) == 0:
-                print('visited dictionary', visited, 'past room', past_room)
 
                 route = bfs(visited, player.current_room.id)
-                print('route back to unexplored', route)
-                return traversal_path
+                # print('route back to unexplored', route)
+                
+                if route == None:
+                    print('visited dictionary', visited)
+                    return traversal_path 
+                else:
+                    for room in route[1:]:
+                        player.travel(room[1])
+                        traversal_path.append(room[1])
 
-            new_direction = random.choice(valid_exits)
-            stack.push(new_direction)       
+                    past_room = player.current_room.id
+                    valid_exits = get_valid_exits(visited, player.current_room.id)
 
-            print('visited dictionary', visited, 'past room', past_room)
+                    new_direction = random.choice(valid_exits)
+                    stack.push(new_direction)
+
+
+            else:
+
+                new_direction = random.choice(valid_exits)
+                stack.push(new_direction)       
+
+                # print('visited dictionary', visited, 'past room', past_room)
 
 
 dfs_modified(traversal_path, player)
